@@ -31,14 +31,19 @@ def sum_list(numbers):
     # TODO: Implement this function
     # Hint: if len(numbers) == 0, return 0
     # Otherwise, return numbers[0] + sum_list(numbers[1:])
+
+    if len(numbers) == 0:
+        return 0 #Base Case
+    else:
+        return numbers[0] + sum_list(numbers[1:]) #Recursive Case
     
     pass
 
 # Uncomment to test sum_list
-# print("\nTest sum_list:")
-# print(f"  sum_list([1, 2, 3, 4]) = {sum_list([1, 2, 3, 4])} (expected: 10)")
-# print(f"  sum_list([]) = {sum_list([])} (expected: 0)")
-# print(f"  sum_list([5, 5, 5]) = {sum_list([5, 5, 5])} (expected: 15)")
+#print("\nTest sum_list:")
+#print(f"  sum_list([1, 2, 3, 4]) = {sum_list([1, 2, 3, 4])} (expected: 10)")
+#print(f"  sum_list([]) = {sum_list([])} (expected: 0)")
+#print(f"  sum_list([5, 5, 5]) = {sum_list([5, 5, 5])} (expected: 15)")
 
 
 def count_even(numbers):
@@ -59,6 +64,14 @@ def count_even(numbers):
         count_even([1, 3, 5]) should return 0
     """
     # TODO: Implement this function
+
+    if len(numbers) == 0:
+        return 0 #Base Case
+    elif numbers[0] % 2 == 0:
+        return 1 + count_even(numbers[1:]) #Even
+    else:
+        return count_even(numbers[1:]) #Odd      
+
     # Hint: Base case is empty list (return 0)
     # If first number is even, add 1 to count from rest of list
     # If first number is odd, just return count from rest of list
@@ -94,7 +107,13 @@ def find_strings_with(strings, target):
     # If first string contains target, add it to results from rest of list
     # Otherwise, just return results from rest of list
     # Use: if target in strings[0]
-    
+
+    if len(strings) == 0:
+        return [] #Base Case
+    elif target in strings[0]:
+        return [strings[0]] + find_strings_with(strings[1:], target) #When first word contains target
+    else:
+        return find_strings_with(strings[1:], target) #When first does not contain target
     pass
 
 # Uncomment to test find_strings_with
@@ -137,6 +156,16 @@ def count_files(directory_path):
     # 2. How do you list items in a directory? (Check Resource 3)
     # 3. For each item, is it a file or directory? Recursively handle directories.
     # 4. How do you combine the results?
+
+    if os.path.isfile(directory_path):
+        return 1 #Base case
+    
+    total_files = 0
+
+    for item in os.listdir(directory_path):
+        full_path = os.path.join(directory_path, item)
+        total_files += count_files(full_path)#Recursive case
+    return total_files
     
     pass
 
@@ -187,12 +216,12 @@ if __name__ == "__main__":
     print("Complete the functions above, then run this file to test your work.\n")
     
     ## 1. Uncomment to run tests for count_files functions
-    # print("Total files (Test Case 1):", count_files("test_cases/case1_flat")) # 5
-    # print("Total files (Test Case 2):", count_files("test_cases/case2_nested")) # 4
-    # print("Total files (Test Case 3):", count_files("test_cases/case3_infected")) # 5
+    print("Total files (Test Case 1):", count_files("test_cases/case1_flat")) # 5
+    print("Total files (Test Case 2):", count_files("test_cases/case2_nested")) # 4
+    print("Total files (Test Case 3):", count_files("test_cases/case3_infected")) # 5
 
     ## 2. Uncomment to run count_files for breached files
-    # print("Total files (breeched files):", count_files("breach_data")) # ???
+    print("Total files (breeched files):", count_files("breach_data")) # 12034
 
     ## 3. Uncomment to run tests for find_infected_files function
     # print("Total Infected Files (Test Case 1):", len(find_infected_files("test_cases/case1_flat"))) # 0
