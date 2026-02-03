@@ -202,6 +202,20 @@ def find_infected_files(directory_path, extension=".encrypted"):
     # 2. Recursive case: If it's a directory, check all items inside
     # 3. You'll need to build and return a list of matching file paths
     # 4. Use os.path.join() to create full paths
+
+    if os.path.isfile(directory_path):
+        if directory_path.endswith(extension):
+            return [directory_path] #Base Case
+        else:
+            return [] #No infected file
+        
+    infected_files = [] #Empty list to store infected files
+    for item in os.listdir(directory_path):
+        full_path = os.path.join(directory_path, item)
+        infected_files += find_infected_files(full_path, extension) #Recursive Case
+    return infected_files
+
+
     
     pass
 
@@ -224,15 +238,27 @@ if __name__ == "__main__":
     print("Total files (breeched files):", count_files("breach_data")) # 12034
 
     ## 3. Uncomment to run tests for find_infected_files function
-    # print("Total Infected Files (Test Case 1):", len(find_infected_files("test_cases/case1_flat"))) # 0
-    # print("Total Infected Files (Test Case 1):", len(find_infected_files("test_cases/case2_nested"))) # 0
-    # print("Total Infected Files (Test Case 3):", len(find_infected_files("test_cases/case3_infected"))) # 3
+    print("Total Infected Files (Test Case 1):", len(find_infected_files("test_cases/case1_flat"))) # 0
+    print("Total Infected Files (Test Case 1):", len(find_infected_files("test_cases/case2_nested"))) # 0
+    print("Total Infected Files (Test Case 3):", len(find_infected_files("test_cases/case3_infected"))) # 3
 
     ## 4. Uncomment to run find_infected breached files
-    # print("Total Infected Files (breached files):", len(find_infected_files("breach_data"))) # ???
+    print("Total Infected Files (breached files):", len(find_infected_files("breach_data"))) # 3615
 
     ## 5. Determine how many files were corrupted by department (Finance, HR, and Sales)
     
+    #in order to determine how many files were corrupted by department we need to set a base path for the program to go through
+
+    base_path = "breach_data"
+
+    print("Infected Files per Department:")
+
+    for department in os.listdir(base_path):
+        department_path = os.path.join(base_path, department)
+
+        if os.path.isdir(department_path):
+            infected = find_infected_files(department_path)
+            print(f"  {department}: {len(infected)} infected files")
 
 
     
